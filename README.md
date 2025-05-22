@@ -77,15 +77,7 @@ git config --global credential.helper store   # Saves in plaintext (less secure)
 
 ## ⬇️ STEP 3: Pull Files from GitHub
 
-### 🛠️ Option 1: Manual Copy
-
-If you already cloned the GitHub repo:
-
-```bash
-cp -r ../github_repo/infrastructure ./infrastructure
-```
-
-### 🔗 Option 2: Git Remote Pull
+### 🔗 Git Remote Pull
 
 ```bash https://github.com/NadjibBenserir/VM_Azure.git
 git remote add github https://github.com/NadjibBenserir/VM_Azure.git
