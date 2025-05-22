@@ -30,6 +30,31 @@ The CI/CD pipeline performs:
 
 
 ---
+### 🔧 Requirement: Terraform in Azure DevOps
+
+> ⚠️ **Important:**  
+> To use this pipeline, you must ensure **Terraform** is available in your Azure DevOps environment.
+
+✅ You can add Terraform support by:
+- Using the built-in `TerraformInstaller@1` task in your pipeline YAML to install a specific version dynamically, or
+- Pre-installing Terraform on your **self-hosted agent** if you want full control and offline support.
+
+---
+
+### 💰 Why Use a Self-Hosted Agent?
+
+By default, Microsoft-hosted agents are billed based on usage or concurrency limits.  
+To reduce CI/CD costs, this project is designed to run on a **self-hosted Ubuntu agent**, which:
+
+- Gives you unlimited build minutes
+- Avoids billing for DevOps agent time
+- Lets you pre-install tools like Terraform, Ansible, Azure CLI, etc.
+- Works great on your local machine, VM, or cloud server
+
+➡️ This approach is ideal for students, open-source projects, or small teams looking to optimize costs while building powerful, automated infrastructure pipelines.
+
+---
+
 
 ## 🟪 STEP 1: Create a New Azure DevOps Repository
 
@@ -164,6 +189,3 @@ To run manually:
 2. Click **Run Pipeline**
 3. Confirm the pipeline uses your **self-hosted agent**
 4. Watch it execute Terraform and Ansible tasks automatically!
-
-
-> Made with 💻 by Nadjib — Infrastructure-as-Code enthusiast!
