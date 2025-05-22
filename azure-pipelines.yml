@@ -1,0 +1,87 @@
+trigger:
+- main
+
+pool:
+  name: Default
+  demands:
+    - agent.name -equals my-linux-agent  # Remplace par le vrai nom de ton agent
+
+variables:
+  azureServiceConnection: 'AzureConnection'   # Connexion Azure créée dans DevOps
+  tfWorkingDirectory: 'infrastructure'
+
+stages:
+- stage: DeployVM
+  jobs:
+  - job: TerraformDeployment
+    displayName: 'Déploiement Terraform VM Azure'
+    steps:
+
+    - task: TerraformInstaller@1
+      displayName: "Installer Terraform"
+      inputs:
+        terraformVersion: '1.5.0'
+
+    - task: AzureCLI@2
+      displayName: 'Terraform Init + Plan'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(tfWorkingDirectory)
+        inlineScript: |
+          echo "Terraform INIT"
+          terraform init
+
+          echo "Terraform PLAN"
+          terraform plan \
+            -var="subscription_id=$(subscription_id)" \
+            -var="client_id=$(client_id)" \
+            -var="client_secret=$(client_secret)" \
+            -var="tenant_id=$(tenant_id)" \
+            -out=tfplan
+
+    - task: AzureCLI@2
+      displayName: 'Terraform Apply'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(tfWorkingDirectory)
+        inlineScript: |
+          echo "Terraform APPLY"
+          terraform apply -auto-approve tfplan
+- stage: ConfigureVM
+  dependsOn: DeployVM
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
+  - job: AnsibleProvisioning
+    displayName: 'Ansible: Configure VM and Install Apache'
+    steps:
+
+    - script: |
+        echo "Installing Ansible..."
+        sudo apt-get update
+        sudo apt-get install -y ansible
+      displayName: 'Install Ansible on DevOps Agent'
+
+    - script: |
+        echo "Setting up SSH private key"
+        mkdir -p ~/.ssh
+        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+        echo "Getting Public IP from Terraform"
+        VM_IP=$(terraform -chdir=infrastructure output -raw public_ip)
+        echo "VM IP: $VM_IP"
+
+        echo "Creating Ansible Inventory"
+        echo "$VM_IP ansible_user=azureuser ansible_ssh_private_key_file=~/.ssh/id_rsa" > infrastructure/inventory
+
+        echo "Running Ansible Playbook"
+        ansible-playbook -i infrastructure/inventory infrastructure/playbook.yml
+      displayName: 'Run Ansible Playbook to Install Apache'
+      env:
+        SSH_PRIVATE_KEY: $(SSH_PRIVATE_KEY)
+    
