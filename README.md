@@ -8,7 +8,7 @@ This guide walks you through migrating your Infrastructure as Code (IaC) files (
 
 1. Go to [Azure DevOps](https://dev.azure.com).
 2. Select your organization. If not create a new organisation
-3. Navigate to **Repos > **Files.
+3. Navigate to Repos > Files.
 4. Click **New repository**:
    - Repository name: `your_Repository_name`
    - Version control: **Git**
@@ -91,10 +91,10 @@ You’ll now see your files in the Azure DevOps repository.
 
 ## 🛠 STEP 5: Create an Azure Pipeline
 
-1. Go to **Pipelines > New Pipeline**
+1. Go to **Pipelines > Create Pipeline**
 2. Choose:
    - Source: `Azure Repos Git`
-   - Repository: `vm_uqam_well_e`
+   - Repository: `your_Repository_name`
    - Configuration: `YAML`
 3. Select the `azure-pipelines.yml` file.
 4. Click **Save and Run**.
@@ -107,7 +107,9 @@ You’ll now see your files in the Azure DevOps repository.
 
 - Go to **Project Settings > Agent Pools**
 - Click **Add Pool**
+- Pool type: **Self-hosted**
 - Name it: `Default` (or any other name)
+- Pipeline permissions: Check Grant access permission to all pipelines
 
 ### 2️⃣ Download & Install Agent on Ubuntu
 
@@ -119,12 +121,7 @@ tar zxvf vsts-agent-linux-x64-3.236.1.tar.gz
 
 ### 3️⃣ Configure the Agent
 
-Generate a **Personal Access Token (PAT)** from Azure DevOps:
-
-- Go to your profile avatar → **Security**
-- Create a token with scope: `Agent Pools (read & manage)`
-
-Then configure the agent:
+Generate an other **Personal Access Token (PAT)** from Azure DevOps (In this time you need to grant the Read & manage for Agent Pools), then configure the agent:
 
 ```bash
 ./config.sh
@@ -132,7 +129,7 @@ Then configure the agent:
 
 - URL: `https://dev.azure.com/YOUR_ORG`
 - PAT: (paste it)
-- Agent Pool: `Default`
+- Agent Pool: `Default` or `your_agent_name`
 - Accept all other prompts
 
 ### 4️⃣ Start the Agent
@@ -159,14 +156,5 @@ To run manually:
 3. Confirm the pipeline uses your **self-hosted agent**
 4. Watch it execute Terraform and Ansible tasks automatically!
 
----
-
-## 💡 Tips & Best Practices
-
-- Add `.terraform/` and `*.tfstate` to your `.gitignore` to avoid tracking local states.
-- You can add secrets via **Azure DevOps Library** or use **Key Vault**.
-- Make your pipeline modular and reusable for larger projects.
-
----
 
 > Made with 💻 by Nadjib — Infrastructure-as-Code enthusiast!
