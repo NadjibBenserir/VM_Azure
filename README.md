@@ -1,6 +1,33 @@
-# 🚀 VM_Azure: GitHub to Azure DevOps with Terraform, Ansible & Self-Hosted Agent
+# 🚀 VM_Azure: CI/CD Deployment on Azure using Terraform, Ansible & Azure DevOps Pipelines
 
-This guide walks you through migrating your Infrastructure as Code (IaC) files (Terraform + Ansible) from GitHub to Azure DevOps and setting up a free, self-hosted Ubuntu agent to run your pipeline.
+This project demonstrates a complete Infrastructure-as-Code (IaC) pipeline to deploy a virtual machine (VM) on Azure using **Terraform**, configure it using **Ansible**, and automate everything through **Azure DevOps Pipelines**.
+
+You'll also learn how to run it all with a **self-hosted Ubuntu agent**.
+
+---
+
+## 🧩 What This Project Does
+
+- Provisions the following Azure resources via Terraform:
+  - Resource group
+  - Virtual network + subnet
+  - Public IP
+  - Network security group (NSG) with SSH & HTTP allowed
+  - Network interface
+  - Ubuntu 18.04 VM with SSH key access
+
+- Then uses **Ansible** to:
+  - Install the Apache Web Server
+  - Ensure Apache is started and enabled at boot
+
+---
+The CI/CD pipeline performs:
+
+1. Checkout code
+2. Install Terraform & Ansible on the agent
+3. Run `terraform init` and `terraform apply`
+4. Use Ansible to configure the newly created VM
+
 
 ---
 
