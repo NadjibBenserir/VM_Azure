@@ -71,7 +71,7 @@ To avoid re-entering the PAT every time Git needs access:
 git config --global credential.helper cache   # Temporarily (15 mins)
 # OR
 git config --global credential.helper store   # Saves in plaintext (less secure)
-
+```
 
 ---
 
