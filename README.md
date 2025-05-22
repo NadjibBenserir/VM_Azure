@@ -8,7 +8,7 @@ This guide walks you through migrating your Infrastructure as Code (IaC) files (
 
 1. Go to [Azure DevOps](https://dev.azure.com).
 2. Select your organization. If not create a new organisation
-3. Navigate to Repos > Files.
+3. Navigate to **Repos > **Files.
 4. Click **New repository**:
    - Repository name: `your_Repository_name`
    - Version control: **Git**
