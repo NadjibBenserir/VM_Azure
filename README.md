@@ -43,44 +43,34 @@ The CI/CD pipeline performs:
 
 ---
 
-## ⬇️ STEP 2: Clone the Azure DevOps Repo Locally
-#We need first to generate a PAT for the crediental after:
+## ⬇️ STEP 2: Clone the Azure DevOps Repository Locally
 
-🔑 How to Generate a Personal Access Token (PAT)
-Go to Azure DevOps and click on User Settings (top-right) > Personal Access Token.
+Before cloning your repository, you need to generate a **Personal Access Token (PAT)** to authenticate securely with Azure DevOps.
 
-Under Personal Access Tokens, click + New Token.
+---
 
-Set: 
+### 🔑 How to Generate a Personal Access Token (PAT)
 
-- Name: GitAccessToken (or any name)
-- Scopes: ✅ Code (read and write)   #important: For security reasons leave all others field unchecked.
-- Expiration: Choose (e.g., 30 or 90 days)
+1. Go to [Azure DevOps](https://dev.azure.com/) and click on your **User Settings** (top-right) > **Personal Access Tokens**.
+2. Click **+ New Token**.
+3. Fill in the following:
+   - **Name**: `GitAccessToken` (or any custom name)
+   - **Scopes**: ✅ `Code > Read & write`  
+     🔐 *Important: For security, leave all other scopes **unchecked***.
+   - **Expiration**: Choose an appropriate duration (e.g., 30 or 90 days)
+4. Click **Create**
+5. ⚠️ **Copy the token immediately** — you won’t be able to view it again.
 
-Click Create
+---
 
-Copy the token (⚠️ You won’t see it again!)
+### ✅ Tip: Save Git Credentials
 
-✅ Tip: Save the Credential
-To avoid entering the token every time:
+To avoid re-entering the PAT every time Git needs access:
 
-git config --global credential.helper cache  # Temporarily stores
-# or
-git config --global credential.helper store  # Saves to plain text (less secure)
-
-🔒 Best Practice
-If you're on a personal or development VM, store is okay. If it's a shared machine or cloud VM, use cache or install a credential manager (like Git Credential Manager). This stores credentials in memory for a short period (15 minutes by default).
-
-#Now lets clone our files
-
-git clone https://dev.azure.com/YOUR_ORG/YOUR_ORG_NAME/_git/your_Repository_name
-
-Git will prompt you with:
-
-Username for 'https://dev.azure.com': your_name
-Password for 'https://YOUR_ORG@dev.azure.com': PAT
-
-cd your_Repository_name
+```bash
+git config --global credential.helper cache   # Temporarily (15 mins)
+# OR
+git config --global credential.helper store   # Saves in plaintext (less secure)
 
 
 ---
